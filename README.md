@@ -14,17 +14,14 @@
 ### 方式二：Wrangler CLI
 
 ```bash
-# 克隆仓库
 git clone https://github.com/zilanLY/alger-music-worker-v2.git
-cd alger-music-worker
-
-# 部署
+cd alger-music-worker-v2
 wrangler deploy
 ```
 
 ## 使用方法
 
-部署完成后，访问 Worker 域名即可使用播放器。
+访问 Worker 域名即可使用播放器：
 
 ```
 https://your-worker-name.workers.dev
@@ -38,27 +35,19 @@ https://your-worker-name.workers.dev
 
 ## API 接口
 
-Worker 内置以下 API 端点：
-
 | 端点 | 说明 |
 |------|------|
 | `/` | Web 播放器界面 |
-| `/api?type=search&server=netease&s=关键词` | 搜索歌曲 |
-| `/api?type=playlist&server=netease&id=歌单ID` | 获取歌单 |
-| `/api?type=url&server=netease&id=歌曲ID` | 获取播放地址 |
-
-## 环境变量
-
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `NETEASE_COOKIE` | 网易云 Cookie | 内置默认值 |
+| `/api?type=search&s=关键词` | 搜索歌曲 |
+| `/api?type=playlist&id=歌单ID` | 获取歌单 |
+| `/api?type=url&id=歌曲ID` | 获取播放地址 |
 
 ## 项目结构
 
 ```
 alger-music-worker/
-├── index.js         # Worker 主代码（API + 前端）
-├── wrangler.toml    # 配置文件
+├── index.js       # Worker 主代码（API + 前端）
+├── wrangler.toml  # 配置文件
 └── README.md
 ```
 
