@@ -1,16 +1,13 @@
-name = "alger-music-api"
-main = "worker.js"
+name = "alger-music-worker"
+main = "index.js"
 compatibility_date = "2024-01-01"
 
 [vars]
+SECRET_DOMAIN = "*"
 DEFAULT_SERVER = "netease"
-DEFAULT_BR = "320000"
+DEFAULT_BR = "320"
+CACHE_MAX_AGE = "300"
 PICSIZE = "300"
 LRCTYPE = "0"
-
-[secrets]
-NETEASE_COOKIE = ""
-TENCENT_COOKIE = ""
-
-[observability]
-enabled = true
+AUTH_ENABLED = "false"
+DEBUG_ALLOW_ALL_REFERERS = "true"
