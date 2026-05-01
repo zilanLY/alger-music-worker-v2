@@ -1,134 +1,83 @@
 # Alger Music Worker
 
-基于 Cloudflare Workers 的音乐 API 服务，配合 AlgerMusicPlayer Web 版使用。
+基于 Cloudflare Worker 的网易云音乐 API + Web 播放器
 
-## 功能特性
+## 项目结构
 
-- 🎵 支持网易云音乐、QQ 音乐歌曲解析
-- 🔐 支持 VIP 歌曲解析（需要配置 Cookie）
-- 🚀 基于 Cloudflare Workers 无服务器架构
-- 💾 内置缓存机制
-- 🎨 兼容 AlgerMusicPlayer 标准接口
-- 🔄 支持自定义 API 和切换功能
-
-## API 接口
-
-### 搜索歌曲
 ```
-GET /search?keywords=关键词&type=song&limit=30
+alger-music-worker/
+├── cloudflare-worker/   # Cloudflare Worker 后端 API
+│   ├── index.js         # Worker 主代码
+│   └── wrangler.toml    # 配置文件
+├── web/                 # Web 前端
+│   └── index.html       # 播放器页面
+└── README.md
 ```
 
-### 获取歌曲详情
-```
-GET /song?id=歌曲ID
-```
+## 部署 Cloudflare Worker
 
-### 获取播放链接
-```
-GET /song/url?id=歌曲ID&br=320000
-```
-
-### 获取歌词
-```
-GET /lyric?id=歌曲ID
-```
-
-### 获取专辑
-```
-GET /album?id=专辑ID
-```
-
-### 获取歌单
-```
-GET /playlist?id=歌单ID
-```
-
-### 每日推荐
-```
-GET /recommend
-```
-
-### 榜单列表
-```
-GET /toplist
-```
-
-## 部署
-
-### 方式一：手动部署
-
-1. 安装 Wrangler
-```bash
-npm install -g wrangler
-```
-
-2. 登录 Cloudflare
-```bash
-wrangler login
-```
-
-3. 配置 secrets
-```bash
-wrangler secret put NETEASE_COOKIE
-# 输入你的网易云 Cookie
-
-wrangler secret put TENCENT_COOKIE  
-# 输入你的 QQ 音乐 Cookie（可选）
-```
-
+1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. 创建一个新的 Worker
+3. 将 `cloudflare-worker/index.js` 的内容复制到 Worker 编辑器
 4. 部署
+
+或者使用 Wrangler CLI:
+
 ```bash
+cd cloudflare-worker
+npm install
 wrangler deploy
 ```
 
-### 方式二：GitHub Actions 自动部署
+## 使用 API
 
-1. Fork 本项目
-2. 在 Cloudflare Dashboard 创建 Workers
-3. 在 GitHub 仓库设置中添加 Secrets:
-   - `CF_API_TOKEN`: Cloudflare API Token
-   - `CF_ACCOUNT_ID`: Cloudflare 账户 ID
-   - `CF_ZONE_ID`: Cloudflare 域名 Zone ID
-   - `NETEASE_COOKIE`: 网易云 Cookie（用于 VIP 歌曲）
-   - `TENCENT_COOKIE`: QQ 音乐 Cookie（可选）
+部署后，你可以这样使用 API:
 
-## 获取 Cookie
+- 获取歌曲信息: `GET /?server=netease&type=song&id=28391863`
+- 获取播放地址: `GET /?server=netease&type=url&id=28391863`
+- 获取封面: `GET /?server=netease&type=pic&id=28391863`
+- 获取歌词: `GET /?server=netease&type=lrc&id=28391863`
 
-### 网易云音乐 Cookie
-1. 登录网页版网易云音乐 (music.163.com)
-2. 按 F12 打开开发者工具
-3. 切换到 Application/Network 标签
-4. 找到任意请求，复制 Cookie 头
+## Web 前端
 
-### QQ 音乐 Cookie
-1. 登录网页版 QQ 音乐 (y.qq.com)
-2. 同样方式获取 Cookie
+将 `web/index.html` 部署到任何静态托管服务:
 
-## 环境变量
+- Cloudflare Pages
+- Vercel
+- Netlify
+- GitHub Pages
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| DEFAULT_SERVER | 默认音乐源 | netease |
-| DEFAULT_BR | 默认音质 | 320000 |
-| PICSIZE | 封面尺寸 | 300 |
-| LRCTYPE | 歌词类型 | 0 |
+## 配置自定义 API (AlgerMusicPlayer)
 
-## Web 端使用
+如果你想在 AlgerMusicPlayer 中使用这个 API，可以创建一个 JSON 配置文件:
 
-打开 `index.html`，在顶部选择 API：
-- **Cloudflare Worker**: 使用本地部署的 Worker
-- **公益API**: 使用公开的公益 API
-- **自定义**: 输入自定义 API 地址
+```json
+{
+  "name": "Alger Music API",
+  "apiUrl": "https://your-worker.workers.dev",
+  "method": "GET",
+  "params": {
+    "server": "netease",
+    "type": "url",
+    "id": "{songId}"
+  },
+  "qualityMapping": {
+    "higher": "128000",
+    "exhigh": "320000",
+    "lossless": "999000"
+  },
+  "responseUrlPath": "url"
+}
+```
 
-## VIP 歌曲解析
-
-VIP 歌曲需要配置有效的 Cookie 才能解析。请确保：
-1. Cookie 对应的账号有 VIP 会员
-2. Cookie 未过期
-3. 定期更新 Cookie
+然后在 AlgerMusicPlayer 设置中导入该配置文件。
 
 ## 注意事项
 
-- 本项目仅供学习交流，请支持正版音乐
-- 请勿用于商业用途
-- 网易云 Cookie 获取可能需要手机验证码登录
+1. 此 API 使用公共网易云音乐接口，VIP 歌曲可能无法播放
+2. 免费 Cloudflare Worker 每月有 100,000 次请求限制
+3. 如需更高稳定性，建议配置自定义域名
+
+## License
+
+MIT
