@@ -1,6 +1,13 @@
-name = "alger-music-api"
+name = "alger-music-worker"
 main = "index.js"
 compatibility_date = "2024-01-01"
 
 [vars]
-API_BASE = "https://netease-cloud-music-api-five-roan-22.vercel.app"
+SECRET_DOMAIN = "*"
+DEFAULT_SERVER = "netease"
+DEFAULT_BR = "320"
+CACHE_MAX_AGE = "300"
+PICSIZE = "300"
+LRCTYPE = "0"
+AUTH_ENABLED = "false"
+DEBUG_ALLOW_ALL_REFERERS = "true"
