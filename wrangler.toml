@@ -1,0 +1,16 @@
+name = "alger-music-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+DEFAULT_SERVER = "netease"
+DEFAULT_BR = "320000"
+PICSIZE = "300"
+LRCTYPE = "0"
+
+[secrets]
+NETEASE_COOKIE = ""
+TENCENT_COOKIE = ""
+
+[observability]
+enabled = true
