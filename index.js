@@ -9,30 +9,14 @@ const HTML = `<!DOCTYPE html>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --primary: #22c55e;
-      --bg-white: #ffffff;
-      --bg-black: #0a0a0a;
-      --bg-light: #f9fafb;
-      --bg-dark: #111827;
-      --text-primary: #111827;
-      --text-secondary: #6b7280;
-      --border: #e5e7eb;
-    }
+    :root { --primary: #22c55e; --bg-white: #ffffff; --bg-black: #0a0a0a; --bg-light: #f9fafb; --bg-dark: #111827; --text-primary: #111827; --text-secondary: #6b7280; --border: #e5e7eb; }
     .dark { --bg-white: #0a0a0a; --bg-light: #111827; --text-primary: #f9fafb; --text-secondary: #9ca3af; --border: #374151; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-white); color: var(--text-primary); height: 100vh; overflow: hidden; }
     .app { display: flex; flex-direction: column; height: 100vh; }
-    
-    /* Header */
     .header { height: 64px; background: var(--bg-white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; flex-shrink: 0; }
     .header-left { display: flex; align-items: center; gap: 8px; }
     .logo-img { width: 32px; height: 32px; border-radius: 8px; }
     .logo-text { font-size: 18px; font-weight: 700; color: var(--primary); }
-    .tabs-track { display: inline-flex; align-items: center; height: 34px; background: var(--bg-light); border-radius: 9999px; padding: 3px; gap: 0; }
-    .tab-slider-bg { position: absolute; height: calc(100% - 6px); border-radius: 9999px; background: var(--primary); box-shadow: 0 1px 6px rgba(34,197,94,0.35); pointer-events: none; transition: all 0.28s; }
-    .tab-btn { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 5px; padding: 5px 14px; border-radius: 9999px; font-size: 13px; font-weight: 600; border: none; background: transparent; cursor: pointer; white-space: nowrap; transition: color 0.2s; color: var(--text-secondary); }
-    .tab-btn.active { color: #fff; }
-    .tab-btn:not(.active):hover { color: var(--text-primary); }
     .header-center { flex: 1; }
     .search-wrap { display: flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 9999px; border: 1.5px solid var(--border); background: var(--bg-light); transition: all 0.2s; }
     .search-wrap:focus-within { border-color: var(--primary); }
@@ -43,11 +27,7 @@ const HTML = `<!DOCTYPE html>
     .header-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 15px; cursor: pointer; transition: all 0.15s; }
     .header-btn:hover { color: var(--primary); border-color: var(--primary); }
     .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #22c55e, #16a34a); cursor: pointer; }
-
-    /* Main Layout */
     .main { display: flex; flex: 1; overflow: hidden; }
-    
-    /* Sidebar */
     .sidebar { width: 100px; display: flex; flex-direction: column; align-items: center; padding: 16px 8px; background: var(--bg-white); border-right: 1px solid var(--border); flex-shrink: 0; }
     .sidebar-logo { width: 40px; height: 40px; border-radius: 10px; margin-bottom: 20px; cursor: pointer; }
     .sidebar-menu { width: 100%; }
@@ -55,13 +35,9 @@ const HTML = `<!DOCTYPE html>
     .sidebar-item:hover { background: var(--bg-light); color: var(--text-primary); }
     .sidebar-item.active { background: rgba(34,197,94,0.1); color: var(--primary); }
     .sidebar-icon { font-size: 22px; }
-
-    /* Content */
     .content { flex: 1; overflow: hidden; background: var(--bg-white); }
     .content-scroll { height: 100%; overflow-y: auto; padding: 20px 40px 120px; }
     .page-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; }
-    
-    /* Hero Section */
     .hero { display: flex; gap: 20px; margin-bottom: 30px; }
     .hero-left { width: 730px; height: 280px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: 12px; position: relative; overflow: hidden; }
     .hero-right { flex: 1; background: var(--bg-light); border-radius: 12px; padding: 20px; }
@@ -71,15 +47,11 @@ const HTML = `<!DOCTYPE html>
     .hero-item:hover { background: #f0fdf4; }
     .hero-item-num { font-size: 14px; font-weight: 700; color: var(--primary); width: 24px; }
     .hero-item-text { font-size: 13px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* Section */
     .section { margin-bottom: 30px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title { font-size: 20px; font-weight: 700; }
     .section-more { color: var(--text-secondary); font-size: 13px; cursor: pointer; }
     .section-more:hover { color: var(--primary); }
-
-    /* Playlist Grid */
     .playlist-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
     .playlist-card { cursor: pointer; }
     .playlist-cover { position: relative; aspect-ratio: 1; background: var(--bg-light); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
@@ -88,8 +60,6 @@ const HTML = `<!DOCTYPE html>
     .playlist-card:hover .playlist-play { opacity: 1; }
     .playlist-name { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .playlist-author { font-size: 12px; color: var(--text-secondary); }
-
-    /* Song List */
     .song-header { display: grid; grid-template-columns: 50px 60px 1fr 1fr 100px 80px; padding: 12px 16px; color: var(--text-secondary); font-size: 12px; border-bottom: 1px solid var(--border); }
     .song-row { display: grid; grid-template-columns: 50px 60px 1fr 1fr 100px 80px; align-items: center; padding: 10px 16px; border-radius: 8px; transition: 0.2s; cursor: pointer; }
     .song-row:hover { background: var(--bg-light); }
@@ -104,8 +74,6 @@ const HTML = `<!DOCTYPE html>
     .song-artist { font-size: 12px; color: var(--text-secondary); }
     .song-album { font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .song-duration { text-align: right; color: var(--text-secondary); font-size: 13px; }
-
-    /* Player Bar */
     .player-bar { height: 70px; background: var(--bg-light); border-top: 1px solid var(--border); display: flex; align-items: center; padding: 0 16px; gap: 16px; flex-shrink: 0; }
     .player-cover { width: 50px; height: 50px; border-radius: 8px; background: var(--bg-dark); flex-shrink: 0; cursor: pointer; overflow: hidden; }
     .player-cover img { width: 100%; height: 100%; object-fit: cover; }
@@ -130,28 +98,16 @@ const HTML = `<!DOCTYPE html>
     .volume-wrap { display: flex; align-items: center; gap: 8px; }
     .volume-bar { width: 80px; height: 4px; background: #d1d5db; border-radius: 2px; cursor: pointer; }
     .volume-fill { height: 100%; background: var(--primary); border-radius: 2px; width: 70%; }
-
-    /* Empty */
-    .empty-state { text-align: center; padding: 60px 20px; }
-    .empty-icon { font-size: 48px; color: var(--text-secondary); margin-bottom: 16px; }
-    .empty-text { color: var(--text-secondary); font-size: 14px; }
-
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-
-    /* Dark mode toggle */
-    .dark .bg-white { background: #0a0a0a; }
   </style>
 </head>
 <body>
-  <div class="app" id="app">
-    <!-- Header -->
+  <div class="app">
     <div class="header">
       <div class="header-left">
-        <img src="https://p3.music.126.net/pcU2pZ5zCx9LIl93a0dW5g==/109951165647003367.png" class="logo-img" alt="logo">
+        <img src="https://p3.music.126.net/pcU2pZ5zCx9LIl93a0dW5g==/109951165647003367.png" class="logo-img">
         <span class="logo-text">Alger Music</span>
       </div>
       <div class="header-center">
@@ -166,12 +122,9 @@ const HTML = `<!DOCTYPE html>
         <div class="user-avatar" onclick="toggleTheme()"></div>
       </div>
     </div>
-
-    <!-- Main -->
     <div class="main">
-      <!-- Sidebar -->
       <div class="sidebar">
-        <img src="https://p3.music.126.net/pcU2pZ5zCx9LIl93a0dW5g==/109951165647003367.png" class="sidebar-logo" alt="logo">
+        <img src="https://p3.music.126.net/pcU2pZ5zCx9LIl93a0dW5g==/109951165647003367.png" class="sidebar-logo">
         <div class="sidebar-menu">
           <div class="sidebar-item active" onclick="showPage('home')"><i class="sidebar-icon ri-home-4-fill"></i>发现音乐</div>
           <div class="sidebar-item" onclick="showPage('list')"><i class="sidebar-icon ri-play-list-2-fill"></i>歌单</div>
@@ -180,16 +133,10 @@ const HTML = `<!DOCTYPE html>
           <div class="sidebar-item" onclick="showPage('toplist')"><i class="sidebar-icon ri-bar-chart-grouped-fill"></i>排行榜</div>
         </div>
       </div>
-
-      <!-- Content -->
       <div class="content">
-        <div class="content-scroll" id="contentArea">
-          <!-- Content will be loaded here -->
-        </div>
+        <div class="content-scroll" id="contentArea"></div>
       </div>
     </div>
-
-    <!-- Player Bar -->
     <div class="player-bar">
       <div class="player-cover" id="playerCover"></div>
       <div class="player-info">
@@ -224,73 +171,37 @@ const HTML = `<!DOCTYPE html>
       </div>
     </div>
   </div>
-
   <audio id="audio" style="display:none"></audio>
-
   <script>
     const audio = document.getElementById('audio');
     let currentSong = null;
     let isPlaying = false;
     let isDark = false;
+    const API_BASE = '';
     
     audio.volume = 0.7;
-    
     audio.ontimeupdate = function() {
       if (audio.duration) {
         document.getElementById('progressFill').style.width = (audio.currentTime / audio.duration * 100) + '%';
         document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
       }
     };
-    audio.onloadedmetadata = function() {
-      document.getElementById('totalTime').textContent = formatTime(audio.duration);
-    };
+    audio.onloadedmetadata = function() { document.getElementById('totalTime').textContent = formatTime(audio.duration); };
     audio.onended = function() { nextSong(); };
     
-    function formatTime(s) {
-      if (!s) return '0:00';
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return m + ':' + (sec < 10 ? '0' + sec : sec);
-    }
-    
-    function togglePlay() {
-      if (!currentSong) return;
-      if (isPlaying) audio.pause(); else audio.play();
-      isPlaying = !isPlaying;
-      document.getElementById('playBtn').innerHTML = isPlaying ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>';
-    }
-    
-    function seek(e) {
-      const rect = e.target.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width;
-      if (audio.duration) audio.currentTime = pct * audio.duration;
-    }
-    
-    function setVolume(e) {
-      const rect = e.target.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width;
-      audio.volume = pct;
-      document.getElementById('volumeFill').style.width = (pct * 100) + '%';
-    }
-    
-    function toggleMute() {
-      audio.muted = !audio.muted;
-      document.getElementById('volumeFill').style.width = audio.muted ? '0%' : (audio.volume * 100) + '%';
-    }
-    
-    function toggleTheme() {
-      isDark = !isDark;
-      document.body.classList.toggle('dark', isDark);
-    }
+    function formatTime(s) { if (!s) return '0:00'; const m = Math.floor(s / 60); const sec = Math.floor(s % 60); return m + ':' + (sec < 10 ? '0' + sec : sec); }
+    function togglePlay() { if (!currentSong) return; if (isPlaying) audio.pause(); else audio.play(); isPlaying = !isPlaying; document.getElementById('playBtn').innerHTML = isPlaying ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>'; }
+    function seek(e) { const rect = e.target.getBoundingClientRect(); const pct = (e.clientX - rect.left) / rect.width; if (audio.duration) audio.currentTime = pct * audio.duration; }
+    function setVolume(e) { const rect = e.target.getBoundingClientRect(); const pct = (e.clientX - rect.left) / rect.width; audio.volume = pct; document.getElementById('volumeFill').style.width = (pct * 100) + '%'; }
+    function toggleMute() { audio.muted = !audio.muted; document.getElementById('volumeFill').style.width = audio.muted ? '0%' : (audio.volume * 100) + '%'; }
+    function toggleTheme() { isDark = !isDark; document.body.classList.toggle('dark', isDark); }
     
     function search() {
       const kw = document.querySelector('.search-input').value.trim();
       if (!kw) return;
       fetch('/api?type=search&s=' + encodeURIComponent(kw))
         .then(r => r.json())
-        .then(d => {
-          if (d.result && d.result.songs) showSearchResult(d.result.songs, kw);
-        });
+        .then(d => { if (d.result && d.result.songs) showSearchResult(d.result.songs, kw); });
     }
     
     function showSearchResult(songs, kw) {
@@ -343,7 +254,6 @@ const HTML = `<!DOCTYPE html>
     }
     
     function nextSong() { console.log('next'); }
-    
     function showPage(page) {
       document.querySelectorAll('.sidebar-item').forEach(function(el) { el.classList.remove('active'); });
       event.target.closest('.sidebar-item').classList.add('active');
@@ -365,18 +275,14 @@ const HTML = `<!DOCTYPE html>
         {id: 316242296, name: '欧美金曲', author: '经典'},
         {id: 2809513713, name: '抖音热歌', author: '热门'}
       ];
-      
       var html = '<div class="hero"><div class="hero-left"></div><div class="hero-right"><div class="hero-title">热门榜单</div><div class="hero-grid">' +
         lists.slice(0,6).map(function(p) { return '<div class="hero-item" onclick="loadPlaylist(' + p.id + ', \\'' + p.name + '\\')"><span class="hero-item-num">1</span><span class="hero-item-text">' + p.name + '</span></div>'; }).join('') + 
         '</div></div></div>';
-      
       html += '<div class="section"><div class="section-header"><span class="section-title">推荐歌单</span><span class="section-more">查看更多 ></span></div><div class="playlist-grid">' +
         lists.map(function(p) { return '<div class="playlist-card" onclick="loadPlaylist(' + p.id + ', \\'' + p.name + '\\')"><div class="playlist-cover"><img src=""><div class="playlist-play"><i class="ri-play-fill"></i></div></div><div class="playlist-name">' + p.name + '</div><div class="playlist-author">' + p.author + '</div></div>'; }).join('') +
         '</div></div>';
-      
       document.getElementById('contentArea').innerHTML = html;
     }
-    
     loadHomePage();
   </script>
 </body>
@@ -390,33 +296,36 @@ const DEFAULT_COOKIE = 'appver=8.2.30; os=iPhone OS; osver=15.0; EVNSM=1.0.0; bu
 const DEFAULT_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 CloudMusic/0.1.1 NeteaseMusic/8.2.30';
 
 export default {
-  async fetch(request) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/' || url.pathname === '/index.html') {
       return new Response(HTML, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
     if (url.pathname === '/api') {
-      return handleApi(url);
+      return handleApi(url, env);
+    }
+    if (url.pathname === '/song' || url.pathname === '/url' || url.pathname === '/pic' || url.pathname === '/lrc') {
+      return handleMetingApi(url, env);
     }
     return new Response(null, { status: 404 });
   },
 };
 
-async function handleApi(url) {
+async function handleApi(url, env) {
   const type = url.searchParams.get('type');
   const id = url.searchParams.get('id') || '';
   const s = url.searchParams.get('s') || '';
   try {
     if (type === 'search' && s) {
-      const data = await callApi('/api/search/get', { s: s, type: 1, limit: 30 });
+      const data = await callNeteaseApi('/api/search/get', { s: s, type: 1, limit: 30 });
       return jsonResponse({ result: { songs: data.result ? data.result.songs : [] } });
     }
     if (type === 'playlist' && id) {
-      const data = await callApi('/api/v3/playlist/detail', { id: id, n: 50 });
+      const data = await callNeteaseApi('/api/v3/playlist/detail', { id: id, n: 50 });
       return jsonResponse({ result: { tracks: data.playlist ? data.playlist.tracks : [] } });
     }
     if (type === 'url' && id) {
-      const data = await callApi('/api/song/enhance/player/url', { ids: [parseInt(id)], br: 320000 });
+      const data = await callNeteaseApi('/api/song/enhance/player/url', { ids: [parseInt(id)], br: 320000 });
       return jsonResponse({ url: data.data && data.data[0] ? data.data[0].url : '' });
     }
     return jsonResponse({ error: 'Invalid request' }, 400);
@@ -425,7 +334,57 @@ async function handleApi(url) {
   }
 }
 
-async function callApi(path, body) {
+async function handleMetingApi(url, env) {
+  const server = url.searchParams.get('server') || 'netease';
+  const type = url.searchParams.get('type') || 'song';
+  const id = url.searchParams.get('id') || '';
+  const br = parseInt(url.searchParams.get('br')) || 320;
+  
+  try {
+    if (type === 'song' && server === 'netease') {
+      const data = await callNeteaseApi('/api/v3/song/detail/', { c: JSON.stringify([{ id: parseInt(id), v: 0 }]) });
+      if (!data.songs || !data.songs[0]) throw new Error('Song not found');
+      const song = data.songs[0];
+      const baseUrl = getBaseUrl(url);
+      return jsonResponse([{
+        title: song.name,
+        author: song.ar.map(a => a.name).join('/'),
+        url: `${baseUrl}/?server=netease&type=url&id=${id}&br=${br}`,
+        pic: `${baseUrl}/?server=netease&type=pic&id=${id}`,
+        lrc: `${baseUrl}/?server=netease&type=lrc&id=${id}`
+      }]);
+    }
+    if (type === 'url' && server === 'netease') {
+      const data = await callNeteaseApi('/api/song/enhance/player/url', { ids: [parseInt(id)], br: br * 1000 });
+      if (data.data && data.data[0] && data.data[0].url) {
+        return Response.redirect(data.data[0].url, 302);
+      }
+      return jsonResponse({ error: 'URL not available' }, 502);
+    }
+    if (type === 'pic' && server === 'netease') {
+      const data = await callNeteaseApi('/api/v3/song/detail/', { c: JSON.stringify([{ id: parseInt(id), v: 0 }]) });
+      if (data.songs && data.songs[0] && data.songs[0].al && data.songs[0].al.picUrl) {
+        return Response.redirect(data.songs[0].al.picUrl, 302);
+      }
+      return jsonResponse({ error: 'Pic not found' }, 404);
+    }
+    if (type === 'lrc' && server === 'netease') {
+      const data = await callNeteaseApi('/api/song/lyric', { id: parseInt(id), os: 'pc', lv: -1, kv: -1, tv: -1, rv: -1 });
+      return new Response(data.lrc ? data.lrc.lyric : '[00:00.00]No lyrics', {
+        headers: { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' }
+      });
+    }
+    return jsonResponse({ error: 'Not supported' }, 400);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500);
+  }
+}
+
+function getBaseUrl(url) {
+  return `${url.protocol}//${url.host}`;
+}
+
+async function callNeteaseApi(path, body) {
   const enc = await createBody(body);
   const res = await fetch('https://music.163.com/weapi' + path.replace('/api/', '/'), {
     method: 'POST',
