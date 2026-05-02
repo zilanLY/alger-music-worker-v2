@@ -6,211 +6,225 @@ const HTML = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alger Music Player Web</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+  <title>Alger Music Player</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      min-height: 100vh;
-      color: #fff;
-    }
-    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-    .header { text-align: center; padding: 30px 0; }
-    .header h1 {
-      font-size: 2rem;
-      background: linear-gradient(90deg, #e91e63, #ff4081);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-    .header p { color: #888; font-size: 0.9rem; }
-    .search-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      background: rgba(255,255,255,0.05);
-      padding: 15px;
-      border-radius: 15px;
-    }
-    .search-box input {
-      flex: 1;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 25px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      font-size: 15px;
-    }
-    .search-box input::placeholder { color: #666; }
-    .search-box input:focus { outline: none; background: rgba(255,255,255,0.15); }
-    .search-box button {
-      padding: 12px 25px;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(135deg, #e91e63, #ff4081);
-      color: #fff;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .search-box button:hover { transform: scale(1.05); }
-    .section {
-      background: rgba(255,255,255,0.05);
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      color: #e91e63;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-title::before {
-      content: '';
-      width: 4px;
-      height: 20px;
-      background: linear-gradient(180deg, #e91e63, #ff4081);
-      border-radius: 2px;
-    }
-    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-    .tag {
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 0.9rem;
-    }
-    .tag:hover { background: linear-gradient(135deg, #e91e63, #ff4081); }
-    .song-list { list-style: none; }
-    .song-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-      gap: 15px;
-    }
-    .song-item:hover { background: rgba(255,255,255,0.1); }
-    .song-item.playing { background: rgba(233,30,99,0.2); border-left: 3px solid #e91e63; }
-    .song-index { width: 25px; color: #666; font-size: 0.9rem; }
-    .song-cover {
-      width: 50px;
-      height: 50px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #222;
-    }
-    .song-info { flex: 1; min-width: 0; }
-    .song-name {
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .song-artist { font-size: 0.8rem; color: #888; }
-    .song-duration { color: #666; font-size: 0.85rem; }
-    #player { margin-top: 20px; }
-    .loading { text-align: center; padding: 30px; color: #888; }
-    .error { text-align: center; padding: 30px; color: #e91e63; }
-    .empty { text-align: center; padding: 30px; color: #666; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0c0c0c; min-height: 100vh; color: #fff; }
+    .app { display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: linear-gradient(180deg, #1a1a1a 0%, #0c0c0c 100%); padding: 20px; border-bottom: 1px solid #222; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .logo { font-size: 20px; font-weight: 600; color: #e91e63; }
+    .search-wrap { display: flex; align-items: center; background: #181818; border-radius: 20px; padding: 8px 16px; width: 300px; }
+    .search-wrap input { background: transparent; border: none; color: #fff; flex: 1; font-size: 14px; outline: none; }
+    .search-wrap input::placeholder { color: #666; }
+    .nav { display: flex; gap: 24px; }
+    .nav-item { color: #999; font-size: 14px; cursor: pointer; padding: 8px 0; }
+    .nav-item.active { color: #e91e63; }
+    .content { flex: 1; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .section-title { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+    .playlist-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+    .playlist-item { background: #181818; border-radius: 8px; padding: 12px; cursor: pointer; transition: 0.2s; }
+    .playlist-item:hover { background: #222; }
+    .playlist-cover { width: 100%; aspect-ratio: 1; background: #222; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+    .playlist-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .playlist-name { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .playlist-count { font-size: 12px; color: #666; }
+    .song-table { width: 100%; }
+    .song-row { display: grid; grid-template-columns: 60px 40px 1fr 1fr 80px; align-items: center; padding: 12px; border-radius: 8px; cursor: pointer; }
+    .song-row:hover { background: #181818; }
+    .song-row.playing { background: rgba(233,30,99,0.1); }
+    .song-num { color: #666; }
+    .song-title { font-size: 14px; }
+    .song-artist { color: #999; font-size: 13px; }
+    .song-album { color: #999; font-size: 13px; }
+    .song-duration { color: #666; font-size: 13px; text-align: right; }
+    .player-bar { background: #181818; border-top: 1px solid #222; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+    .player-cover { width: 50px; height: 50px; border-radius: 8px; background: #222; flex-shrink: 0; }
+    .player-cover img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+    .player-info { flex: 1; min-width: 0; }
+    .player-title { font-size: 14px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-artist { font-size: 12px; color: #999; }
+    .player-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+    .control-btns { display: flex; gap: 16px; align-items: center; }
+    .control-btn { background: none; border: none; color: #fff; cursor: pointer; font-size: 20px; }
+    .control-btn.play { width: 36px; height: 36px; background: #e91e63; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .progress-wrap { display: flex; align-items: center; gap: 8px; width: 100%; max-width: 600px; }
+    .progress-time { font-size: 12px; color: #999; width: 40px; }
+    .progress-bar { flex: 1; height: 4px; background: #333; border-radius: 2px; cursor: pointer; position: relative; }
+    .progress-fill { height: 100%; background: #e91e63; border-radius: 2px; width: 0%; }
+    .volume-wrap { display: flex; align-items: center; gap: 8px; }
+    .volume-btn { background: none; border: none; color: #fff; cursor: pointer; font-size: 18px; }
+    .volume-bar { width: 80px; height: 4px; background: #333; border-radius: 2px; }
+    .result-section { display: none; }
+    .result-section.show { display: block; }
+    .empty { text-align: center; padding: 40px; color: #666; }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app">
     <div class="header">
-      <h1>Alger Music Player</h1>
-      <p>Cloudflare Worker 部署 · 网易云音乐</p>
-    </div>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="搜索歌曲、歌手..." onkeydown="if(event.key==='Enter')search()">
-      <button onclick="search()">搜索</button>
-    </div>
-    <div class="section">
-      <div class="section-title">热门歌单</div>
-      <div class="tags">
-        <div class="tag" onclick="getPlaylist(60198)">经典老歌</div>
-        <div class="tag" onclick="getPlaylist(5273083763)">纯音乐</div>
-        <div class="tag" onclick="getPlaylist(2829816513)">周杰伦</div>
-        <div class="tag" onclick="getPlaylist(5053641485)">林俊杰</div>
-        <div class="tag" onclick="getPlaylist(2884045)">失眠夜</div>
-        <div class="tag" onclick="getPlaylist(3135932023)">学习工作</div>
+      <div class="header-top">
+        <div class="logo">Alger Music</div>
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="搜索音乐" onkeydown="if(event.key==='Enter')doSearch()">
+        </div>
+      </div>
+      <div class="nav">
+        <div class="nav-item active">发现音乐</div>
+        <div class="nav-item">歌单</div>
+        <div class="nav-item">歌手</div>
+        <div class="nav-item">排行榜</div>
       </div>
     </div>
-    <div class="section" id="resultSection" style="display:none;">
-      <div class="section-title" id="resultTitle">搜索结果</div>
-      <ul class="song-list" id="songList"></ul>
+    <div class="content">
+      <div class="section-title">热门歌单</div>
+      <div class="playlist-grid" id="playlistGrid"></div>
+      <div class="result-section" id="resultSection">
+        <div class="section-title" id="resultTitle">搜索结果</div>
+        <div id="songList"></div>
+      </div>
     </div>
-    <div id="player"></div>
+    <div class="player-bar">
+      <div class="player-cover" id="playerCover"></div>
+      <div class="player-info">
+        <div class="player-title" id="playerTitle">未播放</div>
+        <div class="player-artist" id="playerArtist">-</div>
+      </div>
+      <div class="player-controls">
+        <div class="control-btns">
+          <button class="control-btn">⏮</button>
+          <button class="control-btn play" id="playBtn" onclick="togglePlay()">▶</button>
+          <button class="control-btn">⏭</button>
+        </div>
+        <div class="progress-wrap">
+          <span class="progress-time" id="currentTime">0:00</span>
+          <div class="progress-bar" onclick="seekTo(event)">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-time" id="totalTime">0:00</span>
+        </div>
+      </div>
+      <div class="volume-wrap">
+        <button class="volume-btn" onclick="toggleMute()">🔊</button>
+        <div class="volume-bar" onclick="setVolume(event)">
+          <div class="progress-fill" id="volumeFill" style="width:70%"></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+  <audio id="audioPlayer" style="display:none"></audio>
   <script>
-    const API_BASE = '';
-    let ap = null;
-    async function fetchAPI(path) {
-      const res = await fetch(path);
-      return await res.json();
+    const audio = document.getElementById('audioPlayer');
+    const playerTitle = document.getElementById('playerTitle');
+    const playerArtist = document.getElementById('playerArtist');
+    const playerCover = document.getElementById('playerCover');
+    const playBtn = document.getElementById('playBtn');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+    const progressFill = document.getElementById('progressFill');
+    const volumeFill = document.getElementById('volumeFill');
+    
+    let isPlaying = false;
+    let currentSong = null;
+    
+    audio.volume = 0.7;
+    
+    audio.ontimeupdate = function() {
+      const pct = (audio.currentTime / audio.duration) * 100 || 0;
+      progressFill.style.width = pct + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    };
+    
+    audio.onended = function() { playNext(); };
+    
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' + sec : sec);
     }
-    async function search() {
-      const keyword = document.getElementById('searchInput').value.trim();
-      if (!keyword) return;
-      showResult('搜索: ' + keyword);
-      const data = await fetchAPI('/api?type=search&server=netease&s=' + encodeURIComponent(keyword));
-      if (data && data.result && data.result.songs) renderSongs(data.result.songs);
+    
+    function togglePlay() {
+      if (!currentSong) return;
+      if (isPlaying) audio.pause(); else audio.play();
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? '⏸' : '▶';
     }
-    async function getPlaylist(id) {
-      showResult('歌单详情');
-      const data = await fetchAPI('/api?type=playlist&server=netease&id=' + id);
-      if (data && data.result && data.result.tracks) renderSongs(data.result.tracks.slice(0, 50));
+    
+    function seekTo(e) {
+      const rect = e.target.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pct * audio.duration;
     }
-    function showResult(title) {
-      document.getElementById('resultSection').style.display = 'block';
-      document.getElementById('resultTitle').textContent = title;
+    
+    function setVolume(e) {
+      const rect = e.target.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      audio.volume = pct;
+      volumeFill.style.width = (pct * 100) + '%';
     }
-    function renderSongs(songs) {
-      const list = document.getElementById('songList');
-      list.innerHTML = '';
-      if (songs.length === 0) { list.innerHTML = '<li class="empty">暂无结果</li>'; return; }
-      songs.forEach((song, index) => {
-        const li = document.createElement('li');
-        li.className = 'song-item';
-        li.onclick = () => playSong(song);
-        const pic = (song.al && song.al.picUrl) || '';
-        const artist = song.ar ? song.ar.map(a => a.name).join('/') : '未知';
-        li.innerHTML = '<span class="song-index">' + String(index+1).padStart(2,'0') + '</span>' +
-          '<img class="song-cover" src="' + pic + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23222%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23666%22>♪</text></svg>\'">' +
-          '<div class="song-info"><div class="song-name">' + song.name + '</div><div class="song-artist">' + artist + '</div></div>';
-        list.appendChild(li);
-      });
+    
+    function toggleMute() {
+      audio.muted = !audio.muted;
+      volumeFill.style.width = audio.muted ? '0%' : (audio.volume * 100) + '%';
     }
-    async function playSong(song) {
-      document.querySelectorAll('.song-item').forEach(item => item.classList.remove('playing'));
-      event.currentTarget.classList.add('playing');
-      const data = await fetchAPI('/api?type=url&server=netease&id=' + song.id);
-      let url = data.url || '';
-      if (!url) { alert('无法播放该歌曲'); return; }
-      const pic = (song.al && song.al.picUrl) || '';
-      const artist = song.ar ? song.ar.map(a => a.name).join('/') : '未知';
-      if (ap) ap.destroy();
-      ap = new APlayer({
-        container: document.getElementById('player'),
-        theme: '#e91e63',
-        preload: 'auto',
-        volume: 0.7,
-        mutex: true,
-        listFolded: false,
-        listMaxHeight: 350,
-        audio: [{ name: song.name, artist: artist, url: url, cover: pic }]
-      });
+    
+    function loadPlaylist(id, name) {
+      fetch('/api?type=playlist&server=netease&id=' + id)
+        .then(r => r.json())
+        .then(d => {
+          if (d.result && d.result.tracks) renderSongs(d.result.tracks, name);
+        });
     }
-    new APlayer({ container: document.getElementById('player'), theme: '#e91e63', preload: 'auto', volume: 0.7, mutex: true, listFolded: false, listMaxHeight: 350, audio: [] });
+    
+    function doSearch() {
+      const kw = document.getElementById('searchInput').value.trim();
+      if (!kw) return;
+      fetch('/api?type=search&server=netease&s=' + encodeURIComponent(kw))
+        .then(r => r.json())
+        .then(d => {
+          if (d.result && d.result.songs) renderSongs(d.result.songs, '搜索: ' + kw);
+        });
+    }
+    
+    function renderSongs(songs, title) {
+      document.getElementById('resultSection').classList.add('show');
+      document.getElementById('resultTitle').textContent = title || '搜索结果';
+      document.getElementById('playlistGrid').style.display = 'none';
+      const html = songs.map((s, i) => '<div class="song-row" onclick="playSong(' + s.id + ', ' + JSON.stringify(s).replace(/"/g, '&quot;') + ')"><span class="song-num">' + (i+1) + '</span><span class="song-title">' + s.name + '</span><span class="song-artist">' + (s.ar ? s.ar.map(a => a.name).join('/') : '') + '</span><span class="song-album">' + (s.al ? s.al.name : '') + '</span><span class="song-duration">-</span></div>').join('');
+      document.getElementById('songList').innerHTML = html || '<div class="empty">暂无结果</div>';
+    }
+    
+    function playSong(id, song) {
+      currentSong = song;
+      document.querySelectorAll('.song-row').forEach(r => r.classList.remove('playing'));
+      event.target.closest('.song-row').classList.add('playing');
+      fetch('/api?type=url&server=netease&id=' + id)
+        .then(r => r.json())
+        .then(d => {
+          if (d.url) {
+            audio.src = d.url;
+            audio.play();
+            isPlaying = true;
+            playBtn.textContent = '⏸';
+            playerTitle.textContent = song.name;
+            playerArtist.textContent = song.ar ? song.ar.map(a => a.name).join('/') : '';
+            playerCover.innerHTML = song.al && song.al.picUrl ? '<img src="' + song.al.picUrl + '">' : '';
+          }
+        });
+    }
+    
+    function playNext() { console.log('next'); }
+    
+    (function() {
+      const plists = [
+        {id: 60198, name: '经典老歌'},
+        {id: 5273083763, name: '纯音乐'},
+        {id: 2829816513, name: '周杰伦'},
+        {id: 5053641485, name: '林俊杰'},
+        {id: 3135932023, name: '学习工作'}
+      ];
+      document.getElementById('playlistGrid').innerHTML = plists.map(p => '<div class="playlist-item" onclick="loadPlaylist(' + p.id + ', \\'' + p.name + '\\')"><div class="playlist-cover"></div><div class="playlist-name">' + p.name + '</div><div class="playlist-count">点击播放</div></div>').join('');
+    })();
   </script>
 </body>
 </html>`;
@@ -219,46 +233,39 @@ const NETEASE_MODULUS = '1577947502671315022124768178003454981218727833333897474
 const NETEASE_PUBKEY = 65537n;
 const NETEASE_NONCE = '0CoJUm6Qyw8W8jud';
 const NETEASE_IV = '0102030405060708';
-const DEFAULT_NETEASE_COOKIE = 'appver=8.2.30; os=iPhone OS; osver=15.0; EVNSM=1.0.0; buildver=2206; channel=distribution; machineid=iPhone13.3';
-const DEFAULT_NETEASE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 CloudMusic/0.1.1 NeteaseMusic/8.2.30';
+const DEFAULT_COOKIE = 'appver=8.2.30; os=iPhone OS; osver=15.0; EVNSM=1.0.0; buildver=2206; channel=distribution; machineid=iPhone13.3';
+const DEFAULT_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 CloudMusic/0.1.1 NeteaseMusic/8.2.30';
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request) {
     const url = new URL(request.url);
     if (url.pathname === '/' || url.pathname === '/index.html') {
       return new Response(HTML, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
     if (url.pathname === '/api') {
-      return handleApi(request, env);
+      return handleApi(url);
     }
     return new Response(null, { status: 404 });
   },
 };
 
-async function handleApi(request, env) {
-  const url = new URL(request.url);
+async function handleApi(url) {
   const type = url.searchParams.get('type');
-  const server = url.searchParams.get('server') || 'netease';
   const id = url.searchParams.get('id') || '';
   const s = url.searchParams.get('s') || '';
-  const br = parseInt(url.searchParams.get('br')) || 320;
 
   try {
-    if (type === 'search' && server === 'netease' && s) {
-      const data = await neteaseSearch(s);
-      return jsonResponse({ result: { songs: data } });
+    if (type === 'search' && s) {
+      const data = await callApi('/api/search/get', { s, type: 1, limit: 20 });
+      return jsonResponse({ result: { songs: data.result?.songs || [] } });
     }
-    if (type === 'playlist' && server === 'netease' && id) {
-      const data = await neteasePlaylist(id);
-      return jsonResponse({ result: { tracks: data } });
+    if (type === 'playlist' && id) {
+      const data = await callApi('/api/v3/playlist/detail', { id, n: 1000 });
+      return jsonResponse({ result: { tracks: data.playlist?.tracks || [] } });
     }
-    if (type === 'url' && server === 'netease' && id) {
-      const urlData = await neteaseUrl(id, br, env);
-      return jsonResponse({ url: urlData.url });
-    }
-    if (type === 'song' && server === 'netease' && id) {
-      const song = await neteaseSongDetail(id, env);
-      return jsonResponse([{ title: song.name, author: song.artist.join('/'), url: '', pic: song.pic, lrc: '' }]);
+    if (type === 'url' && id) {
+      const data = await callApi('/api/song/enhance/player/url', { ids: [parseInt(id)], br: 320000 });
+      return jsonResponse({ url: data.data?.[0]?.url || '' });
     }
     return jsonResponse({ error: 'Invalid request' }, 400);
   } catch (e) {
@@ -266,166 +273,68 @@ async function handleApi(request, env) {
   }
 }
 
-async function neteaseSearch(keyword) {
-  const data = await callNeteaseApi('/api/search/get', { s: keyword, type: 1, limit: 20 });
-  if (!data.result || !data.result.songs) return [];
-  return data.result.songs;
-}
-
-async function neteasePlaylist(id) {
-  const data = await callNeteaseApi('/api/v3/playlist/detail', { id: id, n: 1000 });
-  if (!data.playlist || !data.playlist.tracks) return [];
-  return data.playlist.tracks;
-}
-
-async function neteaseSongDetail(id, env) {
-  const data = await callNeteaseApi('/api/v3/song/detail/', { c: JSON.stringify([{ id: parseInt(id), v: 0 }]) }, env);
-  if (!data.songs || !data.songs[0]) throw new Error('Song not found');
-  const song = data.songs[0];
-  let picId = song.al.pic_str || song.al.pic || '';
-  if (song.al.picUrl) { const m = song.al.picUrl.match(/\/(\d+)\./); if (m) picId = m[1]; }
-  return { name: song.name, artist: song.ar.map(a => a.name), pic: `https://p3.music.126.net/${neteaseEncryptId(picId)}/${picId}.jpg` };
-}
-
-async function neteaseUrl(id, br, env) {
-  const data = await callNeteaseApi('/api/song/enhance/player/url', { ids: [parseInt(id)], br: br * 1000 }, env);
-  const item = data.data && data.data[0];
-  return { url: item ? item.url || '' : '' };
-}
-
-async function callNeteaseApi(pathname, body, env) {
-  const encryptedBody = await createNeteaseBody(body);
-  const response = await fetch(`https://music.163.com/weapi${pathname.replace('/api/', '/')}`, {
+async function callApi(path, body) {
+  const enc = await createBody(body);
+  const res = await fetch('https://music.163.com/weapi' + path.replace('/api/', '/'), {
     method: 'POST',
-    headers: createNeteaseHeaders(env),
-    body: new URLSearchParams(encryptedBody).toString(),
+    headers: {
+      Referer: 'https://music.163.com/',
+      Cookie: DEFAULT_COOKIE,
+      'User-Agent': DEFAULT_UA,
+      'X-Real-IP': randomIP(),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(enc),
   });
-  if (!response.ok) throw new Error(`API error: ${response.status}`);
-  return response.json();
+  return res.json();
 }
 
-function createNeteaseHeaders(env) {
-  return {
-    Referer: 'https://music.163.com/',
-    Cookie: env.NETEASE_COOKIE || DEFAULT_NETEASE_COOKIE,
-    'User-Agent': DEFAULT_NETEASE_UA,
-    'X-Real-IP': randomNeteaseIp(),
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
+async function createBody(body) {
+  const key = randomHex(16);
+  const first = await encrypt(JSON.stringify(body), NETEASE_NONCE);
+  const second = await encrypt(first, key);
+  return { params: second, encSecKey: rsa(key) };
 }
 
-async function createNeteaseBody(body) {
-  const secretKey = randomHex(16);
-  const payload = JSON.stringify(body);
-  const firstPass = await aesCbcEncryptBase64(payload, NETEASE_NONCE);
-  const secondPass = await aesCbcEncryptBase64(firstPass, secretKey);
-  return { params: secondPass, encSecKey: rsaEncryptSecretKey(secretKey) };
+async function encrypt(text, key) {
+  const ck = await crypto.subtle.importKey('raw', encoder.encode(key), { name: 'AES-CBC' }, false, ['encrypt']);
+  const iv = encoder.encode(NETEASE_IV);
+  const padded = pkcs7(encoder.encode(text), 16);
+  const enc = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, ck, padded);
+  return btoa(String.fromCharCode(...new Uint8Array(enc)));
 }
 
-function randomHex(length) {
-  const bytes = new Uint8Array(Math.ceil(length / 2));
-  crypto.getRandomValues(bytes);
-  let hex = '';
-  for (const byte of bytes) hex += byte.toString(16).padStart(2, '0');
-  return hex.slice(0, length);
+function pkcs7(buf, size) {
+  const pad = size - (buf.length % size) || size;
+  const out = new Uint8Array(buf.length + pad);
+  out.set(buf);
+  out.fill(pad, buf.length);
+  return out;
 }
 
-async function aesCbcEncryptBase64(text, keyText) {
-  const cryptoKey = await crypto.subtle.importKey('raw', encoder.encode(keyText), { name: 'AES-CBC' }, false, ['encrypt']);
-  const payload = pkcs7Pad(encoder.encode(text), 16);
-  const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: encoder.encode(NETEASE_IV) }, cryptoKey, payload);
-  return bytesToBase64(new Uint8Array(encrypted));
+function randomHex(n) {
+  const arr = new Uint8Array(n);
+  crypto.getRandomValues(arr);
+  return [...arr].map(b => b.toString(16).padStart(2,'0')).join('').slice(0,n);
 }
 
-function pkcs7Pad(bytes, blockSize) {
-  const remainder = bytes.length % blockSize;
-  const padding = remainder === 0 ? blockSize : blockSize - remainder;
-  const output = new Uint8Array(bytes.length + padding);
-  output.set(bytes);
-  output.fill(padding, bytes.length);
-  return output;
+function rsa(key) {
+  const rev = key.split('').reverse().join('');
+  const hex = [...rev].map(c => c.charCodeAt(0).toString(16).padStart(2,'0')).join('');
+  const enc = modPow(BigInt('0x' + hex), NETEASE_PUBKEY, BigInt(NETEASE_MODULUS));
+  return enc.toString(16).padStart(256,'0');
 }
 
-function bytesToBase64(bytes) {
-  let binary = '';
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary);
+function modPow(b, e, m) {
+  let r = 1n, c = b % m;
+  while (e > 0n) { if (e & 1n) r = (r * c) % m; c = (c * c) % m; e >>= 1n; }
+  return r;
 }
 
-function rsaEncryptSecretKey(secretKey) {
-  const reversed = secretKey.split('').reverse().join('');
-  let hex = '';
-  for (const char of reversed) hex += char.charCodeAt(0).toString(16).padStart(2, '0');
-  const base = BigInt('0x' + hex);
-  const encrypted = modPow(base, NETEASE_PUBKEY, BigInt(NETEASE_MODULUS));
-  return encrypted.toString(16).padStart(256, '0');
+function randomIP() {
+  const v = 1884815360 + Math.floor(Math.random() * 75000);
+  return [(v>>24)&255, (v>>16)&255, (v>>8)&255, v&255].join('.');
 }
-
-function modPow(base, exponent, modulus) {
-  let result = 1n;
-  let current = base % modulus;
-  let power = exponent;
-  while (power > 0n) {
-    if (power & 1n) result = (result * current) % modulus;
-    current = (current * current) % modulus;
-    power >>= 1n;
-  }
-  return result;
-}
-
-function randomNeteaseIp() {
-  const start = 1884815360, end = 1884890111;
-  const value = start + Math.floor(Math.random() * (end - start + 1));
-  return `${Math.floor(value / 16777216) % 256}.${Math.floor(value / 65536) % 256}.${Math.floor(value / 256) % 256}.${value % 256}`;
-}
-
-function neteaseEncryptId(id) {
-  const magic = '3go8&$8*3*3h0k(2)2';
-  const chars = String(id).split('');
-  let mixed = '';
-  for (let i = 0; i < chars.length; i++) {
-    mixed += String.fromCharCode(chars[i].charCodeAt(0) ^ magic.charCodeAt(i % magic.length));
-  }
-  const digest = new Uint8Array(md5Binary(mixed));
-  return bytesToBase64(digest).replace(/\//g, '_').replace(/\+/g, '-');
-}
-
-function md5Binary(input) {
-  const message = binaryStringToBytes(input);
-  const originalBitLength = message.length * 8;
-  const withPaddingLength = (((message.length + 8) >> 6) + 1) << 6;
-  const buffer = new Uint8Array(withPaddingLength);
-  buffer.set(message);
-  buffer[message.length] = 0x80;
-  const dataView = new DataView(buffer.buffer);
-  dataView.setUint32(buffer.length - 8, originalBitLength >>> 0, true);
-  dataView.setUint32(buffer.length - 4, Math.floor(originalBitLength / 0x100000000), true);
-  let a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
-  const shifts = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
-  const constants = Array.from({length: 64}, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 0x100000000) >>> 0);
-  for (let offset = 0; offset < buffer.length; offset += 64) {
-    const words = new Uint32Array(16);
-    for (let i = 0; i < 16; i++) words[i] = dataView.getUint32(offset + i * 4, true);
-    let a = a0, b = b0, c = c0, d = d0;
-    for (let i = 0; i < 64; i++) {
-      let f, g;
-      if (i < 16) { f = (b & c) | (~b & d); g = i; }
-      else if (i < 32) { f = (d & b) | (~d & c); g = (5 * i + 1) % 16; }
-      else if (i < 48) { f = b ^ c ^ d; g = (3 * i + 5) % 16; }
-      else { f = c ^ (b | ~d); g = (7 * i) % 16; }
-      const next = d; d = c; c = b;
-      b = (b + leftRotate((a + f + constants[i] + words[g]) >>> 0, shifts[i])) >>> 0;
-      a = next;
-    }
-    a0 = (a0 + a) >>> 0; b0 = (b0 + b) >>> 0; c0 = (c0 + c) >>> 0; d0 = (d0 + d) >>> 0;
-  }
-  const digest = new Uint8Array(16);
-  new DataView(digest.buffer).setUint32(0, a0, true).setUint32(4, b0, true).setUint32(8, c0, true).setUint32(12, d0, true);
-  return digest;
-}
-
-function leftRotate(value, amount) { return ((value << amount) | (value >>> (32 - amount))) >>> 0; }
-function binaryStringToBytes(input) { const output = new Uint8Array(input.length); for (let i = 0; i < input.length; i++) output[i] = input.charCodeAt(i) & 0xff; return output; }
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
